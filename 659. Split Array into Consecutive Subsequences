@@ -1,0 +1,47 @@
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+        if(nums.size()<3)
+            return false;
+        int curr=0;
+        int prev=0;
+        int p1=0;
+        int p2=0;
+        int p3=0;
+        
+        
+        int c1=0;
+        int c2=0;
+        int c3=0;
+        int i=0;
+        while(i<nums.size())
+        {
+            int count=0;
+            p1=c1;p2=c2;p3=c3;
+            prev=curr;
+            curr=nums[i];
+            while(i<nums.size() and nums[i]==curr)
+            {
+                i++;
+                count++;
+            }
+            if(curr!=prev+1)
+            {
+                if(p1!=0 or p2!=0)
+                    return false;
+                c1=count;
+                c2=0;
+                c3=0;
+            }
+            else
+            {
+                if(count<p1+p2)
+                    return false;
+                c1=max(0, count-(p1+p2+p3));
+                c2=p1;
+                c3=p2+min(p3, count-(p1+p2));
+            }
+        }
+        return  (c1==0 and c2==0);
+    }
+};
