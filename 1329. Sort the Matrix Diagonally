@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<vector<int>> diagonalSort(vector<vector<int>>& mat) {
+        int c=mat.size(), v=mat[0].size(); // matrix size
+        for(int i=0;i<v;i++)
+        {
+            int x=0,y=i;
+            vector<int>temp;//temporary vector
+            while(x<c and y<v)
+                temp.push_back(mat[x++][y++]); //traverse diagonally
+            sort(temp.begin(),temp.end());//sort the temporary vector in ascending order
+            x=0;y=i;
+            int j=0; //counter variable for iteration in j 
+            while(x<c and y<v)mat[x++][y++]=temp[j++];//restore all the element in correct position
+        }
+        for(int i=1;i<c;i++)
+        {
+            int x=i,y=0;
+            vector<int> temp;
+            while(x<c and y<v)
+                temp.push_back(mat[x++][y++]);
+            sort(temp.begin(),temp.end());
+            x=i;y=0;
+            int j=0;
+            while(x<c and y<v)mat[x++][y++]=temp[j++];
+        }
+        return mat;
+    }
+};
