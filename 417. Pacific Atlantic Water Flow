@@ -1,0 +1,63 @@
+class Solution {
+public:    
+    // reduce of hard coding of 4 directions dfs search
+    pair<int, int> directions[4] = {{0,1},{0,-1},{1,0},{-1,0}};
+
+    // check the bundary of the border.
+    // the result will be true if any of the point is out of the border line
+    bool bundaryCheck(int row, int col, int n, int m){
+        return row<0 ||col<0 || row>=n || col>=m;
+    }
+    
+    void dfs(vector<vector<int>>& heights, vector<vector<bool>>& visit, int row, int col){
+        int nr = heights.size();
+        int nc = heights[0].size();
+        // for each visit, we mart it as true
+        visit[row][col] = true;
+        for(int i=0; i<4; i++){
+            int curX = row + directions[i].first;
+            int curY = col + directions[i].second;
+            // it next level 
+             if(!bundaryCheck(curX, curY, nr, nc) // bundary checking
+                && !visit[curX][curY] // not yet visit
+                && heights[curX][curY] >= heights[row][col] // next point is heigher than or equal to original one
+               ){
+                 // do the dfs again
+                 dfs(heights, visit, curX, curY);
+             }
+        }
+    }
+    
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        int nr = heights.size();
+        int nc = heights[0].size();
+        // create two 2D boolean vector to check visit point. and default all of them are false
+        vector<vector<bool>> pacific(nr, vector<bool>(nc, false));
+        vector<vector<bool>> atlantic(nr, vector<bool>(nc, false));
+        
+        // we start checking the validate from the border of the ocean
+        // first col and last col of the border
+        for(int i=0; i<nr; i++){
+            dfs(heights, pacific, i, 0);
+            dfs(heights, atlantic, i, nc-1);
+        }
+        // first row and last row of the border
+        for(int j=0; j<nc; j++){
+            dfs(heights, pacific, 0, j);
+            dfs(heights, atlantic, nr-1, j);
+        }
+        
+        vector<vector<int>> ans;
+        
+        // by searching two 2D boolean vector, we can find which one the target 
+        for(int i=0; i<nr; i++){
+            for(int j=0; j<nc; j++){
+                // if the point is true at the both of pacific and atlantic ocean, then push it back to the ans
+                if(pacific[i][j] && atlantic[i][j]){
+                    ans.push_back({i,j});
+                }
+            }
+        }
+        return ans;
+    }
+};
