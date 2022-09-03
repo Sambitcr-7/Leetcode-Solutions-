@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int k;
+    vector<int> ans;
+    
+    void dfs(int n, int num){
+        if(n == 0){
+            ans.push_back(num);
+        }else{
+            int d = num%10;
+            
+            if(d-k >= 0){
+                dfs(n-1, num*10 + (d-k));
+            }
+            if(k != 0 && d+k <= 9){
+                dfs(n-1, num*10+ (d+k));
+            }
+        }
+    }
+    vector<int> numsSameConsecDiff(int n, int k) {
+        this -> k = k;
+        
+        if(n == 1) ans.push_back(0);
+        
+        for(int num = 1; num <= 9; ++num){
+            dfs(n-1, num);
+        }
+        
+        return ans;
+    }
+};
