@@ -1,0 +1,61 @@
+class Solution {
+public:
+    bool validUtf8(vector<int>& data) {
+        int idx = 0;        
+        while(idx < data.size()){
+            int cur = data[idx];
+            // cout << cur << endl;
+            if(cur >> 7 == 0){
+                //one bit
+                idx ++;
+            }else if(cur >> 5 == 0b110){
+                // cout << cur << endl;
+                if(idx + 1 < data.size()){
+                    int next1 = data[idx + 1];
+                    // cout << next1 << endl;
+                    if(next1 >> 6 == 0b10){
+                        idx = idx + 2;
+                    }else{
+                        return false;
+                    }
+                }else{
+                    return false;
+                }
+            }else if(cur >> 4 == 0b1110){
+                // cout << cur << endl;
+                if(idx + 2 < data.size()){
+                    int next1 = data[idx + 1];
+                    int next2 = data[idx + 2];
+                    if(next1 >> 6 == 0b10 && next2 >> 6 == 0b10){
+                        idx = idx + 3;
+                    }else{
+                        return false;
+                    }
+                }else{
+                    return false;
+                }
+            }else if(cur >> 3 == 0b11110){
+                // cout << cur << endl;
+                if(idx + 3 < data.size()){
+                    int next1 = data[idx + 1];
+                    int next2 = data[idx + 2];
+                    int next3 = data[idx + 3];
+                    if(next1 >> 6 == 0b10 && next2 >> 6 == 0b10 && next3 >> 6 == 0b10){
+                        idx = idx + 4;
+                    }else{
+                        return false;
+                    }
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+            
+        }
+        
+
+        
+        return true;
+    }
+};
