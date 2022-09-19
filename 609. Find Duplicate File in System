@@ -1,0 +1,29 @@
+vector<vector<string>> findDuplicate(vector<string>& paths) {
+        unordered_map<string, vector<string>> content2file;
+        
+        for(string &path: paths){ 
+            stringstream ss(path);
+            
+            string rootpath, file, content;
+            ss>>rootpath;
+            
+            while(ss>>file){            
+                int i=file.size()-2;
+                
+                content="";
+                for(; i>=0 && file[i] != '('; i--){
+                    content.push_back(file[i]);
+                }reverse(content.begin(), content.end());
+
+                content2file[content].push_back(rootpath+"/"+file.substr(0, i));
+            }
+        }
+
+        vector<vector<string>> ans;
+        for(auto &[content, paths]: content2file){
+            if(paths.size()>1)
+                ans.push_back(paths);
+        }
+        
+        return ans;
+    }
