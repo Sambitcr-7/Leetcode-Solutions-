@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool equationsPossible(vector<string>& equations) {
+        unordered_map<char, unordered_set<char>> g;
+		for (auto eq : equations) {
+			if (eq[1] == '!') continue;
+			g[eq[0]].insert(eq[3]);
+			g[eq[3]].insert(eq[0]);
+		}
+		for (auto eq : equations) {
+			if (eq[1] == '=') continue;
+			unordered_set<char> visited;
+			if (!check(g, eq[0], eq[3], visited)) return false;
+		}
+		return true;
+    }
+	bool check(unordered_map<char, unordered_set<char>>& g, char cur, char target, unordered_set<char>& visited) {
+		if (cur == target || g[cur].count(target)) return false;
+		for (char c : g[cur]) {
+			if (visited.count(c)) continue;
+			visited.insert(c);
+			if (!check(g, c, target, visited)) return false;
+		}
+		return true;
+    }
+};
